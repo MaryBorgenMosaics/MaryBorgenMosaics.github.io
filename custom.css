@@ -29,7 +29,8 @@ min-width: 100% !important;*/
 }
 
 .full {
-    background-image: url(http://previews.123rf.com/images/andesign101/andesign1011004/andesign101100400091/6768854-Arabic-mosque-mosaic-blue-tile-pattern-in-close-up-Stock-Photo.jpg) no-repeat center center fixed;
+    /*background-image: url(http://previews.123rf.com/images/andesign101/andesign1011004/andesign101100400091/6768854-Arabic-mosque-mosaic-blue-tile-pattern-in-close-up-Stock-Photo.jpg) no-repeat center center fixed;*/
+    /*background-image: url(mosaic_table.JPG);*/
     background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
