@@ -1,21 +1,8 @@
-/*html {
-    background: url(http://previews.123rf.com/images/andesign101/andesign1011004/andesign101100400091/6768854-Arabic-mosque-mosaic-blue-tile-pattern-in-close-up-Stock-Photo.jpg) no-repeat center;
-    background-size: cover;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    min-width: 100%;
-    min-height: 100%;
-}
- */
-
 html,body {
     height: 100%;
     background: transparent;
 }
 .full {
-    /*background: url(http://previews.123rf.com/images/andesign101/andesign1011004/andesign101100400091/6768854-Arabic-mosque-mosaic-blue-tile-pattern-in-close-up-Stock-Photo.jpg) no-repeat center;
-    */
     background-image: url(../../../img/red\ flowers\ crop.jpg);
      background-size: cover;
     -webkit-background-size: cover;
@@ -24,38 +11,10 @@ html,body {
     min-width: 100%;
 }
 
-    
-    /*background-color: #ebebeb;
-background-image: url(http://www.transparenttextures.com/patterns/ag-square.png);
-/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
-/*background-color: #4d4d4d;
-background-image: url(http://www.transparenttextures.com/patterns/billie-holiday.png);
-/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
-/*background: url(black-paper.png) repeat 0 0;*/
-/*background-color: #ffffcc;
-background-image: url(http://www.transparenttextures.com/patterns/blizzard.png);
-/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
-/*background: url(http://welovedexter.com/wp-content/uploads/IMG_7416.jpg) no-repeat center;
-background-size: cover;
--webkit-background-size: cover !important;
--moz-background-size: cover !important;
--o-background-size: cover !important;
-min-height: 100% !important;
-min-width: 100% !important;*/
-}
-
-.full {/*
-    background-image: url(http://previews.123rf.com/images/andesign101/andesign1011004/andesign101100400091/6768854-Arabic-mosque-mosaic-blue-tile-pattern-in-close-up-Stock-Photo.jpg) no-repeat center center fixed;
-    background-size: cover;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;*/
-}
-
 .jumbotron {
     padding-top: 70px;
     color: white;
-    background: rgba(0,0,0,.75);
+    background: rgba(0,0,0,.50);
 }
 
 p, div, h1 {
@@ -162,6 +121,7 @@ html, body, .Override.container, .Override .col-md-4, .Override .col-md-8
  }
 
 h1.header_padding{padding:70px;}
+
 img.house_1, img.house_2 {
     /*padding: 70px;*/
     display: block;
