@@ -9,6 +9,7 @@ if len(sys.argv) != 3:
     print("incorrect usage", file=sys.stderr)
     sys.exit()
 
+
 GIVEN_PREFIX = sys.argv[2]
 IMG_EXT = [".jpg", ".png", ".JPG", ".PNG"]
 IMG_PATH = sys.path[0] + "/img/" + GIVEN_PREFIX # add folder indicating prefix to the path
@@ -38,6 +39,7 @@ for f in os.listdir(IMG_PATH):
                 break
             else: continue
 
+used_numbers = []
 img_html = ""
 for count, img in enumerate(onlyimg):
     print("Adding " + img + " to html file...", file=sys.stdout)
@@ -61,7 +63,7 @@ for count, img in enumerate(onlyimg):
             # add image tag
         img_html = img_html + "<!--{" + str(count) + "}--><figure>\n" + \
             "\t<img class=\"" + GIVEN_PREFIX + "_" + str(count) + \
-            "\" src=\"" + GIVEN_PREFIX + "/img/" + img + "\">\n"
+            "\" src=\"img/" + GIVEN_PREFIX + "/" + img + "\">\n"
 
         # add caption
         img_html = img_html + "\t<figcaption class=\"text-center\"><div></div>"
@@ -72,6 +74,7 @@ for count, img in enumerate(onlyimg):
 
         img_html = img_html + "</figure>\n<hr>\n"
         print(img_html)
+        used_numbers.append(count)
 
 img_html = img_html + HTML_IMG_END + "\n"
 print(img_html)
@@ -88,14 +91,23 @@ filename = open(sys.argv[1], 'w')
 filename.write(new_text)
 filename.close()
 
-sys.exit()
+css_filename = sys.path[0] + "/bootstrap-3.3.4-dist/bootstrap-3.3.4-dist/css/"
+css_filename = css_filename + GIVEN_PREFIX + "_css.css"
+print("Creating " + css_filename + "...")
 
+css_file = open(css_filename, "w")
+total_css = ""
+for style in used_numbers:
+    block = "img." + GIVEN_PREFIX + "_" + str(style) + " "
+    block = block + "{\n\tpadding: 70px;\n"
+    block = block + "\tdisplay: block;\n\tmargin-left: auto;\n"
+    block = block + "\tmargin-right: auto;\n\tmax-width: 60%;\n"
+    block = block + "\tmax-height: 60%;\n\tborder-style: solid;\n"
+    block = block + "\tborder-color: #000;\n\tborder-width: thin;\n"
+    block = block + "}\n"
+    total_css = total_css + block
 
-current_char = filename.read(1)
-current_string = ""
-while current_char != "":
-    if current_char.isspace():
-        current_string = ""
-        continue
+    css_file.write(block)
 
-    #current_string = current_string _ current_
+css_file.close()
+print(total_css)
