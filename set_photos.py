@@ -83,8 +83,6 @@ str_displace = len(HTML_IMG_START) + 1
 start_loc = text.index(HTML_IMG_START)
 
 new_text = text[:start_loc + str_displace] + img_html + text[start_loc + str_displace:]
-print(new_text)
-sys.exit()
 
 filename = open(sys.argv[1], 'w')
 filename.write(new_text)
