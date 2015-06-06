@@ -123,13 +123,19 @@ html, body, .Override.container, .Override .col-md-4, .Override .col-md-8
 h1.header_padding{padding:70px;}
 
 img.house_1, img.house_2 {
-    /*padding: 70px;*/
+    padding: 70px;
     display: block;
     margin-left: auto;
     margin-right: auto;
-    max-width: 40%;
-    max-height: 40%;
+    max-width: 60%;
+    max-height: 60%;
     border-style: solid;
     border-color: #000;
     border-width: thin;
+}
+
+.gal_jumbotron {
+    background-image: url(../../../img/red\ flowers\ crop.jpg);
+    background-size: cover;
+
 }
