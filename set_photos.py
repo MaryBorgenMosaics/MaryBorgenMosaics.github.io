@@ -86,6 +86,12 @@ new_text = text[:start_loc + str_displace] + img_html + text[start_loc + str_dis
 print(new_text)
 sys.exit()
 
+filename = open(sys.argv[1], 'w')
+filename.write(new_text)
+filename.close()
+
+sys.exit()
+
 
 current_char = filename.read(1)
 current_string = ""
