@@ -5,6 +5,8 @@ import string
 import re
 
 IMG_DIR_PREFIX = "img/"
+img_start_tag = "<!--{IMGSTART}-->"
+img_end_tag = "<!--{IMGEND}-->"
 
 class HTML_Img:
     def __init__(self, html_page, src1, src2, src3, title, size, third_line=""):
@@ -39,8 +41,6 @@ class HTML_Page:
     def __init__(self, filename):
         self.filename = filename
         self.category = filename.split(".")[0]
-        self.img_start_tag = "<!--{IMGSTART}-->"
-        self.img_end_tag = "<!--{IMGEND}-->"
         self.has_images = self.determine_gallery()
         self.img_list = self.populate_arr()
         if self.img_list:
@@ -50,8 +50,7 @@ class HTML_Page:
     def determine_gallery(self):
         with open(self.filename, 'r') as open_html:
             text = open_html.read()
-            print(self.filename + " determined: ", self.img_start_tag in text and self.img_end_tag in text)
-            return self.img_start_tag in text and self.img_end_tag in text
+            return img_start_tag in text and img_end_tag in text
 
     def populate_arr(self):
         arr = Arr_HTML_Img()
@@ -87,22 +86,38 @@ class Website:
 
     def write_pages(self):
         for gal_page in self.gallery_files:
+            print("***___ " + gal_page.filename)
             open_file = open(gal_page.filename, 'r')
             text = open_file.read()
             open_file.close()
 
             new_img_html = self.generate_html(gal_page)
+            print(new_img_html)
 
     def generate_html(self, gal_page):
-        html = ""
+        html = img_start_tag + "\n"
         for img in gal_page.img_list.imgs:
             print("Generating HTML for " + img.title)
-            img_1_id_str = str(self.next_img_id())
-            img_2_id_str = str(self.next_img_id())
-            img_3_id_str = str(self.next_img_id())
             category = gal_page.category
             html = html + "<figure>\n"
-            html = html + "\t<img class=\"" + category + "_" + img_1_id_str
-            html = html + "\" src=\""
-            print(html)
-            print("\n\n")
+            html = self.add_img_to_html(html, category, img.src1)
+            html = self.add_img_to_html(html, category, img.src2)
+            html = self.add_img_to_html(html, category, img.src3)
+            html = html + "\t<figcaption class=\"text-center\">"
+            html = html + "<div></div><p><i>" + img.title + "</i></p>"
+
+            html = html + "<p>" + img.size + "</p>"
+            html = html + "<p>" + img.third_line + "</p>"
+            html = html + "</figcaption>"
+
+            html = html + "\n"
+            html = html + "</figure>\n<hr>\n"
+
+        html = html + img_end_tag
+        return html
+
+    def add_img_to_html(self, html, category, src):
+        html = html + "\t<img class=\"" + category + "_"
+        html = html + str(self.next_img_id()) + "\" "
+        html = html + "src = \"" + src + "\">\n"
+        return html
