@@ -6,6 +6,7 @@
 from __future__ import print_function
 import sys
 import os
+import string
 
 def print_out(string):
     print(string, file=sys.stdout, end="")
@@ -49,8 +50,22 @@ def main():
     print_out("Code written and maintained by Graham Goudeau\n")
     print_out("\n\n")
 
+    print_out("Going to test html parsing suite; remove later\n")
+    test()
+
     init_menu()
 
+    sys.exit()
+
+def test():
+    with open(get_html_file_to_edit(), 'r') as html_file:
+        search_num = raw_input("Img number: ")
+        search_string = "<!--{" + search_num + "}-->"
+        html_text = html_file.read()
+        img_location = string.index(html_text, search_string)
+        for i in range(img_location, img_location - 10, -1): print_out(html_text[i])
+
+    print_out("Testing finished.  Exiting\n")
     sys.exit()
 
 def get_html_file_to_edit():

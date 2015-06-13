@@ -137,5 +137,9 @@ img.house_1, img.house_2 {
 .gal_jumbotron {
     background-image: url(../../../img/red\ flowers\ crop.jpg);
     background-size: cover;
+}
 
+.gal_jumbotron .overlay {
+    background: rgba(0,0,0,1);
+    background-size: cover;
 }
