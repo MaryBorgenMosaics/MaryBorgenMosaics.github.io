@@ -8,6 +8,14 @@ IMG_DIR_PREFIX = "img/"
 img_start_tag = "<!--{IMGSTART}-->"
 img_end_tag = "<!--{IMGEND}-->"
 
+def print_out(string):
+    print(string, end="", file=sys.stdout)
+
+def print_separate():
+    print_out("\n\n\n")
+    print_out("-"*50)
+    print_out("\n\n\n")
+
 class HTML_Img:
     def __init__(self, html_page, src1, src2, src3, title, size, third_line=""):
         self.src1, self.src2, self.src3 = src1, src2, src3
@@ -43,9 +51,6 @@ class HTML_Page:
         self.category = filename.split(".")[0]
         self.has_images = self.determine_gallery()
         self.img_list = self.populate_arr()
-        if self.img_list:
-            for img in self.img_list.imgs:
-                print(img.title)
 
     def determine_gallery(self):
         with open(self.filename, 'r') as open_html:
@@ -59,7 +64,6 @@ class HTML_Page:
             #pattern = r'src="(.*)">\s*<figcaption.*><i>(.*)<\/i><\/p><p>(.*)<\/p><p>(.*)<\/p><\/figcaption>'
             pattern = r'src="(.*)".*\n.*src="(.*)".*\n.*src="(.*)">\s*.*><i>(.*)<\/i><\/p><p>(.*)<\/p><p>(.*)<\/p>'
             match = re.findall(pattern, text)
-            print(self.filename, match)
             for img in match:
                 src1,src2,src3,title,size,third_line = img
                 arr.add_img(HTML_Img(self.filename,src1,src2,src3,title,size,third_line))
@@ -80,10 +84,35 @@ class Website:
         self.gallery_files = [page for page in self.html_files \
                                 if page.has_images]
 
+    def edit(self):
+        html_obj = self.get_html_file_to_edit()
+        print(html_obj)
+
     def next_img_id(self):
         value = self.img_id
         self.img_id += 1
         return value
+
+    def get_html_file_to_edit(self):
+        print_separate()
+        print_out("Found the following pages with images:\n")
+        for num, html_obj in enumerate(self.gallery_files):
+            # adjust the choices for human-readable, e.g. start at 1
+            print_out(str(num + 1) + ": " + html_obj.category + "\n")
+
+        resp = -1
+        while True:
+            try:
+                resp = int(raw_input("Enter the number of the page to edit: "))
+            except ValueError:
+                print_out("Cannot convert your response into number\n")
+                continue
+
+            resp -= 1 # account for human-readable number choices
+            if resp < 0 or resp > len(self.gallery_files):
+                print_out("Invalid selection\n")
+                continue
+            else: return self.gallery_files[resp]
 
     def write_pages(self):
         for gal_page in self.gallery_files:
