@@ -59,6 +59,7 @@ class HTML_Page:
             #pattern = r'src="(.*)">\s*<figcaption.*><i>(.*)<\/i><\/p><p>(.*)<\/p><p>(.*)<\/p><\/figcaption>'
             pattern = r'src="(.*)".*\n.*src="(.*)".*\n.*src="(.*)">\s*.*><i>(.*)<\/i><\/p><p>(.*)<\/p><p>(.*)<\/p>'
             match = re.findall(pattern, text)
+            print(self.filename, match)
             for img in match:
                 src1,src2,src3,title,size,third_line = img
                 arr.add_img(HTML_Img(self.filename,src1,src2,src3,title,size,third_line))
@@ -86,13 +87,17 @@ class Website:
 
     def write_pages(self):
         for gal_page in self.gallery_files:
-            print("***___ " + gal_page.filename)
             open_file = open(gal_page.filename, 'r')
             text = open_file.read()
             open_file.close()
 
             new_img_html = self.generate_html(gal_page)
-            print(new_img_html)
+            img_start = text.index(img_start_tag)
+            img_end = text.index(img_end_tag) + len(img_end_tag)
+            write_text = text[:img_start] + new_img_html + text[img_end:]
+
+            with open(gal_page.filename, 'w') as updated_file:
+                updated_file.write(write_text)
 
     def generate_html(self, gal_page):
         html = img_start_tag + "\n"
@@ -119,5 +124,5 @@ class Website:
     def add_img_to_html(self, html, category, src):
         html = html + "\t<img class=\"" + category + "_"
         html = html + str(self.next_img_id()) + "\" "
-        html = html + "src = \"" + src + "\">\n"
+        html = html + "src=\"" + src + "\">\n"
         return html
