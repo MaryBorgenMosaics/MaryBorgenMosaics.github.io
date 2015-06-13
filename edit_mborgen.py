@@ -9,5 +9,8 @@ def print_out(string):
 if __name__ == "__main__":
     website = html_img.Website()
     for page in website.gallery_files:
+        print("*** " + page.filename)
+        print(page.img_list)
         print(page.img_list.get_titles())
     print("ready",file=sys.stdout)
+    website.write_pages()
