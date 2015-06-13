@@ -48,10 +48,6 @@ class HTML_Page:
         self.has_images = self.determine_gallery()
         self.img_list = self.populate_arr()
 
-        if self.img_list:
-            for img in self.img_list.imgs:
-                print(img.src)
-
     def determine_gallery(self):
         with open(self.filename, 'r') as open_html:
             text = open_html.read()
@@ -80,25 +76,3 @@ class Website:
 
         self.gallery_files = [page for page in self.html_files \
                                 if page.has_images]
-
-        for page in self.html_files:
-            print(page.filename)
-        for page in self.gallery_files:
-            print(page.category)
-
-
-
-'''
-page = HTML_Page("test.html")
-print(page.has_images)
-img = HTML_Img("img.JPG","newMosaic","60' x 40'","testpage.html")
-arr = Arr_HTML_Img()
-arr.add_img(img)
-arr.add_img(HTML_Img("new.JPG","oldMosaic","100","newpage.html"))
-dump = pickle.dumps(arr)
-new_arr = pickle.loads(dump)
-print(new_arr)
-for img in new_arr.imgs:
-    print(img.html_page)
-'''
-website = Website()
