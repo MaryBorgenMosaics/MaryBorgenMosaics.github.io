@@ -50,9 +50,6 @@ def main():
     print_out("Code written and maintained by Graham Goudeau\n")
     print_out("\n\n")
 
-    print_out("Going to test html parsing suite; remove later\n")
-    test()
-
     init_menu()
 
     sys.exit()
