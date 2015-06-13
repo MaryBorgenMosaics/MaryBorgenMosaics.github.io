@@ -77,6 +77,7 @@ class Website:
     def __init__(self):
         self.base_dir = sys.path[0]
         self.img_id = 0L
+        self.edit_options = ["add", "remove", "reorder"]
 
         self.html_files = [HTML_Page(filename) for filename in \
                     os.listdir(self.base_dir) if filename.endswith(".html")]
@@ -86,7 +87,33 @@ class Website:
 
     def edit(self):
         html_obj = self.get_html_file_to_edit()
-        print(html_obj)
+        print_separate()
+        print_out("How would you like to modify '" + html_obj.category + "'?\n")
+        for num, option in enumerate(self.edit_options):
+            print_out(str(num + 1) + ": " + option + "\n")
+
+        resp = ""
+        while True:
+            try:
+                resp = raw_input("Enter the number of your choice " + \
+                    "or 'q' to exit: ")
+                if resp == 'q': sys.exit()
+                resp_int = int(resp) - 1
+            except ValueError:
+                print_out("Cannot interpret your response as an number\n")
+                continue
+
+            if resp_int == 0:
+                self.add(html_obj)
+                return
+            elif resp_int == 1:
+                self.remove(html_obj)
+                return
+            elif resp_int == 2:
+                self.reorder(html_obj)
+                return
+            else:
+                print_out("Unknown option.  Try again, ya dangus...\n")
 
     def next_img_id(self):
         value = self.img_id
@@ -100,19 +127,22 @@ class Website:
             # adjust the choices for human-readable, e.g. start at 1
             print_out(str(num + 1) + ": " + html_obj.category + "\n")
 
-        resp = -1
+        resp = ""
         while True:
             try:
-                resp = int(raw_input("Enter the number of the page to edit: "))
+                resp = raw_input("Enter the number of the page to edit " + \
+                    "or 'q' to exit: ")
+                if resp == 'q': sys.exit()
+                resp_int = int(resp)
             except ValueError:
-                print_out("Cannot convert your response into number\n")
+                print_out("Cannot interpret your response as a number\n")
                 continue
 
-            resp -= 1 # account for human-readable number choices
-            if resp < 0 or resp > len(self.gallery_files):
+            resp_int -= 1 # account for human-readable number choices
+            if resp_int < 0 or resp_int >= len(self.gallery_files):
                 print_out("Invalid selection\n")
                 continue
-            else: return self.gallery_files[resp]
+            else: return self.gallery_files[resp_int]
 
     def write_pages(self):
         for gal_page in self.gallery_files:
