@@ -8,6 +8,9 @@ IMG_DIR_PREFIX = "img/"
 
 img_start_tag = "<!--{IMGSTART}-->"
 img_end_tag = "<!--{IMGEND}-->"
+css_start_tag = "<!--{CUSTOMCSSSTART}-->"
+css_end_tag = "<!--{CUSTOMCSSEND}-->"
+
 img_exts = ["JPG","jpg","PNG","png"]
 
 def print_out(string):
@@ -412,23 +415,57 @@ class Website:
             text = open_file.read()
             open_file.close()
 
-            new_img_html = self.generate_html(gal_page)
-            img_start = text.index(img_start_tag)
-            img_end = text.index(img_end_tag) + len(img_end_tag)
-            write_text = text[:img_start] + new_img_html + text[img_end:]
+            new_html_css_tuple = self.generate_html_css_codes(gal_page)
+            new_img_html, new_img_css = new_html_css_tuple
+            #new_img_html = self.generate_html(gal_page)
+            css_path = "bootstrap-3.3.4-dist/bootstrap-3.3.4-dist/css/"
+            css_path = css_path + gal_page.category + "_css.css"
+
+            css_meta_tag = "\t" + css_start_tag + "\n\t"
+            css_meta_tag = css_meta_tag + "<link rel=\"stylesheet\" href=\""
+            css_meta_tag = css_meta_tag + css_path + "\">\n"
+            css_meta_tag = css_meta_tag + "\t" + css_end_tag + "\n"
+
+            css_start = text.index(css_start_tag)
+            css_end = text.index(css_end_tag) + len(css_end_tag)
+            write_text = text[:css_start] + css_meta_tag + text[css_end:] 
+
+            img_start = write_text.index(img_start_tag)
+            img_end = write_text.index(img_end_tag) + len(img_end_tag)
+            write_text = write_text[:img_start] + new_img_html + write_text[img_end:]
 
             with open(gal_page.filename, 'w') as updated_file:
                 updated_file.write(write_text)
 
-    def generate_html(self, gal_page):
+            with open(css_path, 'w') as new_css:
+                for cur_id in new_img_css:
+                    new_css.write(self.gen_css(gal_page.category, cur_id))
+
+    def gen_css(self, category, cur_id):
+        css = "." + category + "_" + str(cur_id) + " {\n"
+        css = css + "\tpadding: 70px;\n\tdisplay: block;\n"
+        css = css + "\tmargin-left: auto;\n\tmargin-right: auto;\n"
+        css = css + "\tmax-width: 60%;\n\tmax-height: 60%;\n"
+        css = css + "\tborder-style: solid;\n\tborder-color: #000;\n"
+        css = css + "\tborder-width: thin;\n}\n"
+
+        return css
+    def generate_html_css_codes(self, gal_page):
+        css_codes = []
         html = img_start_tag + "\n"
         for img in gal_page.img_list.imgs:
             print("Generating HTML for " + img.title)
+            new_id1 = self.next_img_id()
+            css_codes.append(str(new_id1))
+            new_id2 = self.next_img_id()
+            css_codes.append(str(new_id2))
+            new_id3 = self.next_img_id()
+            css_codes.append(str(new_id3))
             category = gal_page.category
             html = html + "<figure>\n"
-            html = self.add_img_to_html(html, category, img.src1)
-            html = self.add_img_to_html(html, category, img.src2)
-            html = self.add_img_to_html(html, category, img.src3)
+            html = self.add_img_to_html(html, category, img.src1, new_id1)
+            html = self.add_img_to_html(html, category, img.src2, new_id2)
+            html = self.add_img_to_html(html, category, img.src3, new_id3)
             html = html + "\t<figcaption class=\"text-center\">"
             html = html + "<div></div><p><i>" + img.title + "</i></p>"
 
@@ -440,10 +477,10 @@ class Website:
             html = html + "</figure>\n<hr>\n"
 
         html = html + img_end_tag
-        return html
+        return (html, css_codes)
 
-    def add_img_to_html(self, html, category, src):
+    def add_img_to_html(self, html, category, src, new_id):
         html = html + "\t<img class=\"" + category + "_"
-        html = html + str(self.next_img_id()) + "\" "
+        html = html + str(new_id) + "\" "
         html = html + "src=\"" + src + "\">\n"
         return html
