@@ -61,7 +61,6 @@ class HTML_Page:
         arr = Arr_HTML_Img()
         with open(self.filename, 'r') as open_html:
             text = open_html.read()
-            #pattern = r'src="(.*)">\s*<figcaption.*><i>(.*)<\/i><\/p><p>(.*)<\/p><p>(.*)<\/p><\/figcaption>'
             pattern = r'src="(.*)".*\n.*src="(.*)".*\n.*src="(.*)">\s*.*><i>(.*)<\/i><\/p><p>(.*)<\/p><p>(.*)<\/p>'
             match = re.findall(pattern, text)
             for img in match:
@@ -114,6 +113,66 @@ class Website:
                 return
             else:
                 print_out("Unknown option.  Try again, ya dangus...\n")
+
+    def add(self, html_obj):
+        pass
+    def remove(self, html_obj):
+        pass
+    def reorder(self, html_obj):
+        img_list = html_obj.img_list.imgs
+        print_separate()
+        print_out("Found the following images on " + html_obj.category + "\n")
+        for num, name in enumerate(html_obj.img_list.get_titles()):
+            print_out(str(num + 1) + ": " + name + "\n")
+
+        resp = ""
+        resp_int = -1
+        while True:
+            try:
+                resp = raw_input("Enter the number of the image you want " + \
+                    "to move, or 'q' to exit: ")
+                if resp == "q": sys.exit()
+
+                resp_int = int(resp)
+            except ValueError:
+                print_out("Whatchu talkin bout? Try again dog...\n")
+                continue
+
+            resp_int -= 1
+            if resp_int < 0 or resp_int >= len(img_list):
+                print_out("Invalid selection, try again\n")
+                continue
+
+            break
+
+        original_index = resp_int
+        resp = ""
+        resp_int = -1
+        while True:
+            try:
+                resp = raw_input("Enter the position on the page you want " + \
+                    "to move the image to, or 'q' to exit: ")
+                if resp == "q": sys.exit()
+
+                resp_int = int(resp)
+            except ValueError:
+                print_out("Whatchu talkin bout? Try again dog...\n")
+                continue
+
+            resp_int -= 1
+            if resp_int < 0 or resp_int >= len(img_list):
+                print_out("Invalid selection, try again\n")
+                continue
+
+            break
+
+        new_index = resp_int 
+
+        img = html_obj.img_list.imgs.pop(original_index)
+        html_obj.img_list.imgs.insert(new_index, img)
+
+        for img in html_obj.img_list.imgs:
+            print(img.title)
 
     def next_img_id(self):
         value = self.img_id

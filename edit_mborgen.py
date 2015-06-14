@@ -19,7 +19,7 @@ def prologue_info():
         resp = raw_input("Begin editing? y/n ('n' to quit)... ")
         print_out("\n")
         if resp != 'y' and resp != 'n': continue
-        if resp == 'y': return 
+        if resp == 'y': return
         if resp == 'n': sys.exit()
 
 if __name__ == "__main__":
@@ -33,4 +33,4 @@ if __name__ == "__main__":
         print_out(page.img_list.get_titles())
         print_out("\n")
     website.edit()
-    #website.write_pages()
+    website.write_pages()
