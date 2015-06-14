@@ -92,14 +92,14 @@ class Website:
                                 if page.has_images]
 
     def edit(self):
-        html_obj = self.get_html_file_to_edit()
-        print_separate()
-        print_out("How would you like to modify '" + html_obj.category + "'?\n")
-        for num, option in enumerate(self.edit_options):
-            print_out(str(num + 1) + ": " + option + "\n")
-
         resp = ""
         while True:
+            html_obj = self.get_html_file_to_edit()
+            print_separate()
+            print_out("How would you like to modify '" + html_obj.category + "'?\n")
+            for num, option in enumerate(self.edit_options):
+                print_out(str(num + 1) + ": " + option + "\n")
+
             try:
                 resp = raw_input("Enter the number of your choice " + \
                     "or 'q' to exit: ")
@@ -111,16 +111,16 @@ class Website:
 
             if resp_int == 0:
                 self.add(html_obj)
-                break
+                
             elif resp_int == 1:
                 self.remove(html_obj)
-                break
+                
             elif resp_int == 2:
                 self.reorder(html_obj)
-                break
+                
             elif resp_int == 3:
                 self.change_info(html_obj)
-                break
+                
             else:
                 print_out("Unknown option.  Try again, ya dangus...\n")
 
@@ -355,14 +355,16 @@ class Website:
                             "." not in direc]
         for num, direc in enumerate(directories):
             print_out(str(num + 1) + ": " + direc + "\n")
+        print_out(str(len(directories) + 1) + ": remove image\n")
 
         choice = -1
-        while choice < 0 or choice >= len(directories):
+        while choice < 0 or choice > len(directories):
             choice = self.numeric_input("Choose where (inside the " + \
                     "img/ folder) that the " + \
                     "image(s) resides in (or 'q'): ", "Invalid choice\n")
             choice -= 1
 
+        if choice == len(directories): return ""
         img_path = img_path + directories[choice] + "/"
 
         # SET all required sources
