@@ -108,18 +108,28 @@ class Website:
 
             if resp_int == 0:
                 self.add(html_obj)
-                return
+                break
             elif resp_int == 1:
                 self.remove(html_obj)
-                return
+                break
             elif resp_int == 2:
                 self.reorder(html_obj)
-                return
+                break
             elif resp_int == 3:
                 self.change_info(html_obj)
-                return
+                break
             else:
                 print_out("Unknown option.  Try again, ya dangus...\n")
+
+            print_separate()
+            resp = ""
+            while True:
+                resp = raw_input("Have another change to make? (y/n) ")
+                if resp != 'y' and resp != 'n': continue
+
+                break
+
+            if resp == 'n': break
 
     # DOES NOT adjust for off by one errors
     def numeric_input(self, prompt, on_error):
@@ -314,7 +324,10 @@ class Website:
                             "Invalid choice\n")
             field_choice -= 1
 
-        new_value = raw_input("New value for " + fields[field_choice] + ": ")
+        if field_choice >= 0 and field_choice <= 2:
+            new_value = self.get_new_source(html_obj)
+        else:
+            new_value = raw_input("New value for " + fields[field_choice] + ": ")
 
         if field_choice == 0:
             html_obj.img_list.imgs[choice].src1 = new_value
@@ -328,6 +341,41 @@ class Website:
             html_obj.img_list.imgs[choice].size = new_value
         elif field_choice == 5:
             html_obj.img_list.imgs[choice].third_line = new_value    
+
+    def get_new_source(self, html_obj):
+        html_page = html_obj.filename
+
+        # FIND the directory the photo resides in
+        print_separate()
+        img_path = "img/"
+        directories = [direc for direc in os.listdir(sys.path[0] + "/"+ img_path) if \
+                            "." not in direc]
+        for num, direc in enumerate(directories):
+            print_out(str(num + 1) + ": " + direc + "\n")
+
+        choice = -1
+        while choice < 0 or choice >= len(directories):
+            choice = self.numeric_input("Choose where (inside the " + \
+                    "img/ folder) that the " + \
+                    "image(s) resides in (or 'q'): ", "Invalid choice\n")
+            choice -= 1
+
+        img_path = img_path + directories[choice] + "/"
+
+        # SET all required sources
+        imgs = [img for img in os.listdir(sys.path[0] + "/" + img_path) if img[-3:] in img_exts]
+        print_separate()
+        # make a list of all items that end with an image extension
+        for num, filename in enumerate(imgs):
+            print_out(str(num + 1) + ": " + filename + "\n")
+
+        choice = -1
+        while choice < 0 or choice >= len(imgs):
+            choice = self.numeric_input("Choose which file you want to " + \
+                    "add: ", "Invalid choice\n")
+            choice -= 1
+
+        return img_path + imgs[choice]
 
     def next_img_id(self):
         value = self.img_id
@@ -392,7 +440,6 @@ class Website:
             html = html + "</figure>\n<hr>\n"
 
         html = html + img_end_tag
-        print(html)
         return html
 
     def add_img_to_html(self, html, category, src):
