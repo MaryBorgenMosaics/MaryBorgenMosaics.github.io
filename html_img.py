@@ -25,6 +25,8 @@ class HTML_Img:
         self.size = size
         self.html_page = html_page
         self.third_line = third_line
+        self.fields = ["image 1","image 2", "image 3", "title", "size", \
+                "third line"]
 
 class Arr_HTML_Img:
     def __init__(self):
@@ -78,7 +80,7 @@ class Website:
     def __init__(self):
         self.base_dir = sys.path[0]
         self.img_id = 0L
-        self.edit_options = ["add", "remove", "reorder"]
+        self.edit_options = ["add", "remove", "reorder", "change info"]
 
         self.html_files = [HTML_Page(filename) for filename in \
                     os.listdir(self.base_dir) if filename.endswith(".html")]
@@ -112,6 +114,9 @@ class Website:
                 return
             elif resp_int == 2:
                 self.reorder(html_obj)
+                return
+            elif resp_int == 3:
+                self.change_info(html_obj)
                 return
             else:
                 print_out("Unknown option.  Try again, ya dangus...\n")
@@ -199,6 +204,7 @@ class Website:
         new_img = HTML_Img(html_page,src1,src2,src3,title,size,third_line)
 
         # determine position on the page
+        print_separate()
         for num, image in enumerate(html_obj.img_list.imgs):
             print_out(str(num + 1) + ": " + image.title + "\n")
         print_out(str(len(html_obj.img_list.imgs) + 1) + ": last on page\n")
@@ -207,7 +213,7 @@ class Website:
         while choice < 0 or choice > len(html_obj.img_list.imgs):
             choice = self.numeric_input("Select a position on the page " + \
                 "for the new work.\n(This will move down all mosaics that " + \
-                "come after it): ", "Invalid choice")
+                "come after it): ", "Invalid choice\n")
             choice -= 1
 
         if choice == len(html_obj.img_list.imgs) - 1:
@@ -217,7 +223,20 @@ class Website:
 
                 
     def remove(self, html_obj):
-        pass
+        img_list = html_obj.img_list.imgs
+        print_separate()
+        print_out("Found the following images on " + html_obj.category + "\n")
+        for num, name in enumerate(html_obj.img_list.get_titles()):
+            print_out(str(num + 1) + ": " + name + "\n")
+
+        choice = -1
+        while choice < 0 or choice > len(html_obj.img_list.imgs):
+            choice = self.numeric_input("Select the image to remove: ", \
+                            "Invalid choice\n")
+            choice -= 1
+
+        html_obj.img_list.imgs.pop(choice)
+
     def reorder(self, html_obj):
         img_list = html_obj.img_list.imgs
         print_separate()
@@ -271,6 +290,44 @@ class Website:
         img = html_obj.img_list.imgs.pop(original_index)
         html_obj.img_list.imgs.insert(new_index, img)
 
+    def change_info(self, html_obj):
+        img_list = html_obj.img_list.imgs
+        print_separate()
+        print_out("Found the following images on " + html_obj.category + "\n")
+        for num, name in enumerate(html_obj.img_list.get_titles()):
+            print_out(str(num + 1) + ": " + name + "\n")
+
+        choice = -1
+        while choice < 0 or choice > len(html_obj.img_list.imgs):
+            choice = self.numeric_input("Select the image to change: ", \
+                            "Invalid choice\n")
+            choice -= 1
+
+        print_separate()
+        fields = html_obj.img_list.imgs[choice].fields
+        for num, field in enumerate(fields):
+            print_out(str(num + 1) + ": " + field + "\n")
+        
+        field_choice = -1
+        while field_choice < 0 or field_choice > len(fields):
+            field_choice = self.numeric_input("Select the field you want to change: ", \
+                            "Invalid choice\n")
+            field_choice -= 1
+
+        new_value = raw_input("New value for " + fields[field_choice] + ": ")
+
+        if field_choice == 0:
+            html_obj.img_list.imgs[choice].src1 = new_value
+        elif field_choice == 1:
+            html_obj.img_list.imgs[choice].src2 = new_value
+        elif field_choice == 2:
+            html_obj.img_list.imgs[choice].src3 = new_value
+        elif field_choice == 3:
+            html_obj.img_list.imgs[choice].title = new_value
+        elif field_choice == 4:
+            html_obj.img_list.imgs[choice].size = new_value
+        elif field_choice == 5:
+            html_obj.img_list.imgs[choice].third_line = new_value    
 
     def next_img_id(self):
         value = self.img_id
