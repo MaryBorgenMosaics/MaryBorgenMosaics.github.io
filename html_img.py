@@ -111,16 +111,12 @@ class Website:
 
             if resp_int == 0:
                 self.add(html_obj)
-                
             elif resp_int == 1:
                 self.remove(html_obj)
-                
             elif resp_int == 2:
                 self.reorder(html_obj)
-                
             elif resp_int == 3:
                 self.change_info(html_obj)
-                
             else:
                 print_out("Unknown option.  Try again, ya dangus...\n")
 
@@ -317,6 +313,20 @@ class Website:
             choice -= 1
 
         print_separate()
+        print_img_fields = html_obj.img_list.imgs[choice]
+        print_out("Current information for " + print_img_fields.title + ":\n")
+        print_out("\tTitle: " + print_img_fields.title + "\n")
+        print_out("\tSize: " + print_img_fields.size + "\n")
+        if print_img_fields.src1:
+            print_out("\tFile 1: " + print_img_fields.src1 + "\n")
+        if print_img_fields.src2:
+            print_out("\tFile 2: " + print_img_fields.src2 + "\n")
+        if print_img_fields.src3:
+            print_out("\tFile 3: " + print_img_fields.src3 + "\n")
+        if print_img_fields.third_line:
+            print_out("\tThird description line: " + print_img_fields.third_line + "\n")
+
+        print_out("\n\n")
         fields = html_obj.img_list.imgs[choice].fields
         for num, field in enumerate(fields):
             print_out(str(num + 1) + ": " + field + "\n")
