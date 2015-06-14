@@ -421,10 +421,10 @@ class Website:
             css_path = "bootstrap-3.3.4-dist/bootstrap-3.3.4-dist/css/"
             css_path = css_path + gal_page.category + "_css.css"
 
-            css_meta_tag = "\t" + css_start_tag + "\n\t"
+            css_meta_tag = css_start_tag + "\n\t"
             css_meta_tag = css_meta_tag + "<link rel=\"stylesheet\" href=\""
             css_meta_tag = css_meta_tag + css_path + "\">\n"
-            css_meta_tag = css_meta_tag + "\t" + css_end_tag + "\n"
+            css_meta_tag = css_meta_tag + "\t" + css_end_tag 
 
             css_start = text.index(css_start_tag)
             css_end = text.index(css_end_tag) + len(css_end_tag)
