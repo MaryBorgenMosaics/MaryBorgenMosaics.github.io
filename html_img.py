@@ -149,8 +149,8 @@ class Website:
 
         # FIND the directory the photo resides in
         print_separate()
-        img_path = "/img/"
-        directories = [direc for direc in os.listdir(sys.path[0] + img_path) if \
+        img_path = "img/"
+        directories = [direc for direc in os.listdir(sys.path[0] + "/"+ img_path) if \
                             "." not in direc]
         for num, direc in enumerate(directories):
             print_out(str(num + 1) + ": " + direc + "\n")
@@ -165,28 +165,56 @@ class Website:
         img_path = img_path + directories[choice] + "/"
 
         # SET all required sources
-        print_separate()
-        imgs = [img for img in os.listdir(sys.path[0] + img_path) if img[-3:] in img_exts]
+        src1 = src2 = src3 = ""
+        imgs = [img for img in os.listdir(sys.path[0] + "/" + img_path) if img[-3:] in img_exts]
         for num_src in range(num_images):
+            print_separate()
             # make a list of all items that end with an image extension
             for num, filename in enumerate(imgs):
                 print_out(str(num + 1) + ": " + filename + "\n")
 
+            choice = -1
+            while choice < 0 or choice >= len(imgs):
+                choice = self.numeric_input("Photo " + str(num_src+1) + "; " + \
+                    "Choose which file you want to " + \
+                        "add: ", "Invalid choice\n")
+                choice -= 1
+
+            if num_src == 0:
+                src1 = img_path + imgs[choice]
+            elif num_src == 1:
+                src2 = img_path + imgs[choice]
+            elif num_src == 2:
+                src3 = img_path + imgs[choice]
+
+        # Set title, size, third line
+        print_separate()
+        title = raw_input("Title for this mosaic: ")
+        print_separate()
+        size = raw_input("Size of this mosaic: ")
+        print_separate()
+        third_line = raw_input("Third line (or press enter to leave blank): ")
+
+        # generate the image
+        new_img = HTML_Img(html_page,src1,src2,src3,title,size,third_line)
+
+        # determine position on the page
+        for num, image in enumerate(html_obj.img_list.imgs):
+            print_out(str(num + 1) + ": " + image.title + "\n")
+        print_out(str(len(html_obj.img_list.imgs) + 1) + ": last on page\n")
+
         choice = -1
-        while choice < 0 or choice >= len(imgs):
-            choice = self.numeric_input("Choose which file you want to " + \
-                    "add: ", "Invalid choice\n")
+        while choice < 0 or choice > len(html_obj.img_list.imgs):
+            choice = self.numeric_input("Select a position on the page " + \
+                "for the new work.\n(This will move down all mosaics that " + \
+                "come after it): ", "Invalid choice")
             choice -= 1
 
-        img_path = img_path + imgs[choice]
-        print(imgs[choice])
-        print(img_path)
+        if choice == len(html_obj.img_list.imgs) - 1:
+            html_obj.img_list.imgs.append(new_img)
+        else:
+            html_obj.img_list.imgs.insert(choice, new_img)
 
-
- 
-        src1 = src2 = src3 = ""
-        for num_src in range(num_images):
-            if num_src == 0: pass
                 
     def remove(self, html_obj):
         pass
@@ -238,7 +266,7 @@ class Website:
 
             break
 
-        new_index = resp_int 
+        new_index = resp_int
 
         img = html_obj.img_list.imgs.pop(original_index)
         html_obj.img_list.imgs.insert(new_index, img)
@@ -284,9 +312,8 @@ class Website:
             img_end = text.index(img_end_tag) + len(img_end_tag)
             write_text = text[:img_start] + new_img_html + text[img_end:]
 
-            print("Skipping writing...")
-#           with open(gal_page.filename, 'w') as updated_file:
-#               updated_file.write(write_text)
+            with open(gal_page.filename, 'w') as updated_file:
+                updated_file.write(write_text)
 
     def generate_html(self, gal_page):
         html = img_start_tag + "\n"
