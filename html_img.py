@@ -462,17 +462,18 @@ class Website:
         css = css + "\tborder-width: thin;\n}\n"
 
         return css
+
     def generate_html_css_codes(self, gal_page):
         css_codes = []
         html = img_start_tag + "\n"
         for img in gal_page.img_list.imgs:
             print("Generating HTML for " + img.title)
             new_id1 = self.next_img_id()
-            css_codes.append(str(new_id1))
+            if img.src1: css_codes.append(str(new_id1))
             new_id2 = self.next_img_id()
-            css_codes.append(str(new_id2))
+            if img.src2: css_codes.append(str(new_id2))
             new_id3 = self.next_img_id()
-            css_codes.append(str(new_id3))
+            if img.src3: css_codes.append(str(new_id3))
             category = gal_page.category
             html = html + "<figure>\n"
             html = self.add_img_to_html(html, category, img.src1, new_id1)
